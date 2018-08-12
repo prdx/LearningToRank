@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "index": {
+      "store": {
+        "type": "default"
+      },
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "analysis": {
+      "analyzer": {
+        "my_english": {
+          "type": "english",
+          "stopwords_path": "stoplist.txt",
+          "tokenizer" : "standard",
+          "filter": ["standard", "lowercase", "stemmer"]
+        }
+      }
+    }
+  },
+  "filter": {
+    "stemmer": {
+      "type": "stemmer",
+      "name": "porter_stem"
+    }
+  },
+  "mappings": {
+    "document": {
+      "properties": {
+        "doc_id":{
+          "type": "text",
+          "store": "true",
+          "index": "not_analyzed"
+        },
+        "text": {
+          "type": "text",
+          "fielddata": "true",
+          "store": "true",
+          "term_vector": "with_positions_offsets_payloads",
+          "analyzer": "my_english"
+        },
+        "doc_length": {
+          "type": "integer",
+          "store": "true"
+        }
+      }
+    }
+  }
+}

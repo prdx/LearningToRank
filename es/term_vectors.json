@@ -1,0 +1,5 @@
+{
+  "fields": ["text"],
+  "term_statistics": "true",
+  "field_statistics": "true"
+}

@@ -1,0 +1,8 @@
+{
+  "stored_fields": ["doc_length"], 
+  "query": {
+    "terms": {
+      "_id": [] 
+    }
+  }
+}

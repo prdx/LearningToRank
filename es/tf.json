@@ -1,0 +1,13 @@
+{
+  "query": {
+    "match": {"text": ""}
+  },
+  "script_fields": {
+    "index_tf": {
+      "script": {
+        "lang": "groovy",
+        "inline": ""
+      }
+    }
+  }
+}
