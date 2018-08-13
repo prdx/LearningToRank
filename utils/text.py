@@ -115,7 +115,7 @@ def build_query_list():
                 query_list[key_val[0]] = key_val[1]
 
         for key in query_list:
-            query_list[key] = stem_sentence(query_list[key]) 
+            query_list[key] = stem_sentence(query_list[key])
 
         return query_list
 

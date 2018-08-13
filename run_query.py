@@ -27,14 +27,13 @@ def run_built_in():
     for key in query_list:
         results = built_in.query(query_list[key])['hits']['hits']
         rank = 1
-        for result in results:
-            write_output(
-                    model = 'es',
-                    query_no = str(key),
-                    doc_no = result['_id'],
-                    rank = str(rank),
-                    score = str(result['_score']))
-            rank += 1
+        write_output(
+                model = 'es',
+                query_no = str(key),
+                doc_no = result['_id'],
+                rank = str(rank),
+                score = str(result['_score']))
+        rank += 1
 
 def run_okapi_tf():
     print("Processing: Okapi TF model")
@@ -44,16 +43,15 @@ def run_okapi_tf():
         results = okapi_tf.query(query, tf_for_queries[q_no])
         rank = 1
         for key, value in sorted(iter(results.items()), key=lambda k_v: (k_v[1],k_v[0]), reverse=True):
-            if rank > Constants.MAX_OUTPUT:
-                break
-            if value != 0:
-                write_output(
-                        model = 'okapi_tf',
-                        query_no = str(q_no),
-                        doc_no = str(key),
-                        rank = str(rank),
-                        score = str(value))
-                rank += 1
+            # if rank > Constants.MAX_OUTPUT:
+                # break
+            write_output(
+                    model = 'okapi_tf',
+                    query_no = str(q_no),
+                    doc_no = str(key),
+                    rank = str(rank),
+                    score = str(value))
+            rank += 1
     print("Okapi TF Done")
 
 def run_tf_idf():
@@ -64,16 +62,15 @@ def run_tf_idf():
         results = tfidf.query(query, wfd_collection, tf_for_queries[q_no])
         rank = 1
         for key, value in sorted(iter(results.items()), key=lambda k_v1: (k_v1[1],k_v1[0]), reverse=True):
-            if rank > Constants.MAX_OUTPUT:
-                break
-            if value != 0:
-                write_output(
-                        model = 'tfidf',
-                        query_no = str(q_no),
-                        doc_no = str(key),
-                        rank = str(rank),
-                        score = str(value))
-                rank += 1
+            # if rank > Constants.MAX_OUTPUT:
+                # break
+            write_output(
+                    model = 'tfidf',
+                    query_no = str(q_no),
+                    doc_no = str(key),
+                    rank = str(rank),
+                    score = str(value))
+            rank += 1
     print("TF-IDF Done")
 
 def run_bm25():
@@ -84,16 +81,15 @@ def run_bm25():
         results = bm25.query(query, wfd_collection, tf_for_queries[q_no])
         rank = 1
         for key, value in sorted(iter(results.items()), key=lambda k_v2: (k_v2[1],k_v2[0]), reverse=True):
-            if rank > Constants.MAX_OUTPUT or value <= 0:
-                break
-            if value != 0:
-                write_output(
-                        model = 'bm25',
-                        query_no = str(q_no),
-                        doc_no = str(key),
-                        rank = str(rank),
-                        score = str(value))
-                rank += 1
+            # if rank > Constants.MAX_OUTPUT or value <= 0:
+                # break
+            write_output(
+                    model = 'bm25',
+                    query_no = str(q_no),
+                    doc_no = str(key),
+                    rank = str(rank),
+                    score = str(value))
+            rank += 1
     print("BM25 Done")
 
 def run_laplace_unigram():
@@ -104,16 +100,15 @@ def run_laplace_unigram():
         results = laplace_unigram.query(query, tf_for_queries[q_no])
         rank = 1
         for key, value in sorted(iter(results.items()), key=lambda k_v3: (k_v3[1],k_v3[0]), reverse=True):
-            if rank > Constants.MAX_OUTPUT:
-                break
-            if value != 0:
-                write_output(
-                        model = 'laplace_unigram',
-                        query_no = str(q_no),
-                        doc_no = str(key),
-                        rank = str(rank),
-                        score = str(value))
-                rank += 1
+            # if rank > Constants.MAX_OUTPUT:
+                # break
+            write_output(
+                    model = 'laplace_unigram',
+                    query_no = str(q_no),
+                    doc_no = str(key),
+                    rank = str(rank),
+                    score = str(value))
+            rank += 1
     print("Unigram LM with Laplace done")
 
 def run_jelmer_unigram():
@@ -128,16 +123,15 @@ def run_jelmer_unigram():
                 total_length)
         rank = 1
         for key, value in sorted(iter(results.items()), key=lambda k_v4: (k_v4[1],k_v4[0]), reverse=True):
-            if rank > Constants.MAX_OUTPUT:
-                break
-            if value != 0:
-                write_output(
-                        model = 'jelmer_unigram',
-                        query_no = str(q_no),
-                        doc_no = str(key),
-                        rank = str(rank),
-                        score = str(value))
-                rank += 1
+            # if rank > Constants.MAX_OUTPUT:
+                # break
+            write_output(
+                    model = 'jelmer_unigram',
+                    query_no = str(q_no),
+                    doc_no = str(key),
+                    rank = str(rank),
+                    score = str(value))
+            rank += 1
     print("Unigram LM with Jelinek Mercer done")
 
 def run_pseudo_feedback():
@@ -217,8 +211,8 @@ if __name__ == '__main__':
         t.start()
 
 
-    t0 = threading.Thread(target=run_built_in)
-    threads.append(t0)
+    # t0 = threading.Thread(target=run_built_in)
+    # threads.append(t0)
     t1 = threading.Thread(target=run_okapi_tf)
     threads.append(t1)
     t2 = threading.Thread(target=run_tf_idf)
