@@ -155,13 +155,14 @@ def build_matrix():
 
 matrix = build_matrix()
 query_ids = set(matrix.keys())
+test_id = set(["56", "57", "64", "71", "99"])
 print(len(query_ids))
-train_id = random.sample(query_ids, 20)
+train_id = query_ids - test_id
+print(len(train_id))
 
 with open("matrix_train.csv", "w") as train, open("matrix_test.csv", "w") as test:
     for q_id in matrix:
         for doc_id in matrix[q_id]:
-            print(matrix[q_id][doc_id])
             string = "{0},{1},{2}\n".format(doc_id, q_id, ",".join(matrix[q_id][doc_id]))
             if q_id in train_id:
                 train.write(string)

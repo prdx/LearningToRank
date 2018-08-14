@@ -7,7 +7,7 @@ df_train_y = df_train.iloc[:,-1]
 q_id_train = df_train.iloc[:,1]
 doc_id_train = df_train.iloc[:,0]
 
-regressor = LinearRegression()
+regressor = LinearRegression(fit_intercept=True, normalize=True)
 regressor.fit(df_train_x, df_train_y)
 
 df_test = pd.read_csv("./matrix_test.csv", header=None)
