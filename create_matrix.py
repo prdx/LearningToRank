@@ -112,22 +112,39 @@ def build_features_jelmer_unigram():
             print(e)
     return jelmer_unigram
 
-def build_main_dict():
+def build_main_dict(qrel):
     main_dict = {}
     query_list = build_query_list()
     for q_id in query_list:
+        print(q_id)
         main_dict[q_id] = {}
 
-        with open("./stored_documents.txt", "r") as docs:
-            lines = docs.read().split("\n")
-            lines.pop()
-            for doc_id in lines:
+
+    for q_id in query_list:
+        doc_count = 0
+        for doc_id in qrel[q_id]:
+            main_dict[q_id][doc_id] = []
+            doc_count += 1
+
+        print("Qrel added: {0}".format(doc_count))
+
+        remaining = 1000 - doc_count
+        with open("./results/bm25.txt", "r") as bm25_res:
+            lines = bm25_res.read()
+        lines = lines.split("\n")
+        # Pop extra line
+        lines.pop()
+        while remaining > 0:
+            # Now the process for appending the n-lowest rank doc begins
+            line = lines.pop()
+            qid, author, doc_id, rank, score, mode = line.split()
+            if doc_id not in main_dict[q_id]:
                 main_dict[q_id][doc_id] = []
+                remaining -= 1
 
     return main_dict
 
 def build_matrix():
-    matrix = build_main_dict()
     bm25 = build_features_bm25()
     okapi_tf = build_features_okapitf()
     tfidf = build_features_tfidf()
@@ -137,9 +154,11 @@ def build_matrix():
     qrel = read_file("./AP_DATA/qrels.adhoc.51-100.AP89.txt")
     qrel = build_qrel(qrel)
 
+    matrix = build_main_dict(qrel)
+
     for qid in matrix:
         for doc_id in matrix[qid]:
-            print("For Q_ID: {0} and Doc_ID: {1}".format(qid, doc_id))
+            print("For Q_ID: {0} and Doc_ID: {1}, lenght: {2}".format(qid, doc_id, len(matrix[qid])))
             matrix[qid][doc_id].append(bm25[qid][doc_id])
             matrix[qid][doc_id].append(okapi_tf[qid][doc_id])
             matrix[qid][doc_id].append(tfidf[qid][doc_id])

@@ -50,9 +50,7 @@ if es.ping():
 
                 for doc in docs:
                     doc_id = find_doc_no_by_regex(doc)
-                    if doc_id not in qrel_doc_list:
-                        not_found.add(doc_id)
-                        continue
+
                     text = find_all_texts_by_regex(doc)
                     text = text.strip()
                     # doc_length = len(text.split(' '))
@@ -67,33 +65,3 @@ if es.ping():
     MAX_EXTRA_DATA = 25000
     counter = 0
 
-    # Add extra 1000 documents per query
-    for f in os.listdir(Constants.DATA_PATH):
-        if f.startswith('ap'):
-            with open(Constants.DATA_PATH + f, 'r') as d:
-                d = d.read()
-                docs = find_docs_by_regex(d)
-
-                print(("Processing {0}, with {1} docs".format(f, len(docs)))) 
-
-                for doc in docs:
-                    if counter == MAX_EXTRA_DATA:
-                        break
-                    doc_id = find_doc_no_by_regex(doc)
-                    if doc_id not in not_found:
-                        continue
-                    text = find_all_texts_by_regex(doc)
-                    text = text.strip()
-                    # doc_length = len(text.split(' '))
-                    # if text != '':
-                        # print "Empty doc found: {0}".format(doc_id)
-                        # break
-
-                    store_document(doc_id, text)
-                    doc_indexed.add(doc_id)
-                    counter += 1
-
-    print(len(doc_indexed))
-    with open("./stored_documents.txt", "w") as sd:
-        for doc in doc_indexed:
-            sd.write(doc + "\n")
